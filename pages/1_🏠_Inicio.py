@@ -101,16 +101,19 @@ def show():
                 
                 chart_data = pd.DataFrame({
                         'Produto': ['X', 'Y', 'Z', 'W'],
-                        'Entrada_Compra': [dados_estoque['X'].iloc[0], dados_estoque['Y'].iloc[0], dados_estoque['Z'].iloc[0], dados_estoque['W'].iloc[0]],
+                        'Qtd_Compra': [dados_estoque['X'].iloc[0], dados_estoque['Y'].iloc[0], dados_estoque['Z'].iloc[0], dados_estoque['W'].iloc[0]],
                         'Entrada_Dev': [dados_estoque['X'].iloc[1], dados_estoque['Y'].iloc[1], dados_estoque['Z'].iloc[1], dados_estoque['W'].iloc[1]],
-                        'Saida_Venda' : [dados_estoque['X'].iloc[2], dados_estoque['Y'].iloc[2], dados_estoque['Z'].iloc[2], dados_estoque['W'].iloc[2]], 
+                        'Qtd_Venda' : [dados_estoque['X'].iloc[2], dados_estoque['Y'].iloc[2], dados_estoque['Z'].iloc[2], dados_estoque['W'].iloc[2]], 
                         'Saida_Dev': [dados_estoque['X'].iloc[3], dados_estoque['Y'].iloc[3], dados_estoque['Z'].iloc[3], dados_estoque['W'].iloc[3]],
                         
                     })
                 
                 with tab1:
                     
-                    st.table(chart_data)
+                    chart_data.set_index('Produto', inplace=True)
+
+                    # Exibe o gráfico de barras
+                    st.bar_chart(chart_data)
 
                 with tab2:
                     
@@ -119,6 +122,12 @@ def show():
 
             
         with col3:
+            
+            with st.container(border=True):
+                st.markdown("""
+                    <p style='text-align: center;'>Tabela de Produtos</p>
+                """, unsafe_allow_html=True)
+            
             df = pd.DataFrame(dados_estoque)
 
 

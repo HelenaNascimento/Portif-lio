@@ -30,43 +30,36 @@ def show():
     st.divider()
     
     with st.container(border=True):
-            st.markdown("""
-                <h2 style='text-align: center;'>Dados Vendas</h2>
-            """, unsafe_allow_html=True)
+        st.markdown("""
+            <h2 style='text-align: center;'>Dados Clientes</h2>
+        """, unsafe_allow_html=True)
 
     with st.container(border=True):
+        df = load_data()
         
-        col1, col2, col3 = st.columns((1.5, 4.5, 2.0))
-    
-        with col1:
-            st.write('olá')
-        with col2:    
-            df = load_data()
-            
-            # Criando o mapa com Folium
-            m = folium.Map(location=[df['latitude'].mean(), df['longitude'].mean()], zoom_start=7.45)
-            
-            # Adicionando marcadores coloridos ao mapa e registrando a quantidade de clientes
-            for index, row in df.iterrows():
-                icon_color = colorize_client_count(row['cliente'])
-                icon = folium.Icon(color=icon_color, icon='star')  # Ícone de estrela
-                folium.Marker(
-                    location=[row['latitude'], row['longitude']],
-                    icon=icon,
-                    tooltip=f"Clientes: {row['cliente']}"
-                ).add_to(m)
-            
-            # Exibindo o mapa no Streamlit com legenda
-            st_data = st_folium(m, width=500, height=500)
-            
-            legend = """
-            Faixa de cores: | < 20 <span style='color:#FF0000'>■</span> | < 40 <span style='color:#FFA500'>■</span> |< 70 <span style='color:#0000FF'>■</span> |> 70 <span style='color:#008000'>■</span> |
-            """
-            st.markdown(legend, unsafe_allow_html=True)
-            
-        with col3:
-            
-            st.write('olá')
-            
+        legend = """
+        | < 20 <span style='color:#FF0000'>■</span> | < 40 <span style='color:#FFA500'>■</span> |< 70 <span style='color:#0000FF'>■</span> |> 70 <span style='color:#008000'>■</span> |
+        """
+        
+        st.markdown(f'<p style="text-align: center;">Quantidade de Clientes na Região <br> {legend}</p>', unsafe_allow_html=True)
+        
+        # Criando o mapa com Folium
+        m = folium.Map(location=[df['latitude'].mean(), df['longitude'].mean()], zoom_start=7.45)
+        
+        # Adicionando marcadores coloridos ao mapa e registrando a quantidade de clientes
+        for index, row in df.iterrows():
+            icon_color = colorize_client_count(row['cliente'])
+            icon = folium.Icon(color=icon_color, icon='star')  # Ícone de estrela
+            folium.Marker(
+                location=[row['latitude'], row['longitude']],
+                icon=icon,
+                tooltip=f"Clientes: {row['cliente']}"
+            ).add_to(m)
+        
+        # Exibindo o mapa no Streamlit com legenda
+        st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
+        st_folium(m, width=850, height=500)
+        st.markdown('</div>', unsafe_allow_html=True)
+
 if __name__ == "__main__":
     show()
