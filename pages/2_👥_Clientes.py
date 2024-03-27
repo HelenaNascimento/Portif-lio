@@ -4,7 +4,7 @@ import folium
 from streamlit_folium import st_folium
 
 def load_data():
-    df = pd.read_csv("pages\dados\cidades.csv") 
+    df = pd.read_csv("pages/dados/cidade.csv") 
     return df
 
 def colorize_client_count(client_count):
